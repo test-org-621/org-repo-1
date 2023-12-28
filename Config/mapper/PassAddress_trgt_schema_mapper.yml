@@ -1,0 +1,53 @@
+solace-connector-mapper:
+    mapper-metadata:
+        source-schema-type: json
+        target-schema-type: sourcetable
+        encrypted: null
+        source-schema-name: PassAddress
+        target-schema-name: sourcetable
+    payload-mapper:
+        mapper-id:
+            source-xpath: PassAddress/id
+            source-datatype: NUMBER
+            target-xpath: PASS_ADDRESS/ID
+            target-datatype: NUMBER
+        mapper-city:
+            source-xpath: PassAddress/city
+            source-datatype: VARCHAR2
+            target-xpath: PASS_ADDRESS/CITY
+            target-datatype: VARCHAR2
+        mapper-zip:
+            source-xpath: PassAddress/zip
+            source-datatype: VARCHAR2
+            target-xpath: PASS_ADDRESS/ZIP
+            target-datatype: VARCHAR2
+        mapper-passId:
+            source-xpath: PassAddress/passId
+            source-datatype: NUMBER
+            target-xpath: PASS_ADDRESS/PASS_ID
+            target-datatype: NUMBER
+        mapper-child-id:
+            source-xpath: PassAddress/MessageLoad/id
+            source-datatype: NUMBER
+            target-xpath: PASS_ADDRESS/MESSAGE_LOAD/ID
+            target-datatype: NUMBER
+        mapper-child-load:
+            source-xpath: PassAddress/MessageLoad/load
+            source-datatype: BLOB
+            target-xpath: PASS_ADDRESS/MESSAGE_LOAD/LOAD
+            target-datatype: BLOB
+        mapper-child-trackingId:
+            source-xpath: PassAddress/MessageLoad/trackingId
+            source-datatype: VARCHAR2
+            target-xpath: PASS_ADDRESS/MESSAGE_LOAD/TRACKING_ID
+            target-datatype: VARCHAR2
+        mapper-child-readTime:
+            source-xpath: PassAddress/MessageLoad/readTime
+            source-datatype: DATE
+            target-xpath: PASS_ADDRESS/MESSAGE_LOAD/READ_TIME
+            target-datatype: DATE
+        mapper-child-flag:
+            source-xpath: PassAddress/MessageLoad/flag
+            source-datatype: VARCHAR2
+            target-xpath: PASS_ADDRESS/MESSAGE_LOAD/FLAG
+            target-datatype: VARCHAR2
