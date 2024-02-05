@@ -1,0 +1,34 @@
+solace-connector-mapper:
+    mapper-metadata:
+        source-schema-type: json
+        target-schema-type: sourcetable
+        escape-special-characters: true
+        encrypted: null
+        source-schema-name: CdDbEnvs
+        target-schema-name: sourcetable
+    payload-mapper:
+        mapper-id:
+            source-xpath: CdDbEnvs/id
+            source-datatype: NUMBER
+            target-xpath: CD_DB_ENVS/ID
+            target-datatype: NUMBER
+        mapper-name:
+            source-xpath: CdDbEnvs/name
+            source-datatype: VARCHAR2
+            target-xpath: CD_DB_ENVS/NAME
+            target-datatype: VARCHAR2
+        mapper-description:
+            source-xpath: CdDbEnvs/description
+            source-datatype: VARCHAR2
+            target-xpath: CD_DB_ENVS/DESCRIPTION
+            target-datatype: VARCHAR2
+        mapper-type:
+            source-xpath: CdDbEnvs/type
+            source-datatype: VARCHAR2
+            target-xpath: CD_DB_ENVS/TYPE
+            target-datatype: VARCHAR2
+        mapper-envHierarchy:
+            source-xpath: CdDbEnvs/envHierarchy
+            source-datatype: NUMBER
+            target-xpath: CD_DB_ENVS/ENV_HIERARCHY
+            target-datatype: NUMBER

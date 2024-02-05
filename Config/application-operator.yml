@@ -1,0 +1,43 @@
+something: haha
+solace-persistence:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle10gDialect
+  datasource:
+    url: 'jdbc:oracle:thin:@(DESCRIPTION= (LOAD_BALANCE=YES) (FAILOVER=YES) (ADDRESS_LIST= (ADDRESS=(PROTOCOL=tcp)(HOST= localhost)(PORT=1521)) ) (CONNECT_DATA= (SERVICE_NAME=orcl)))'
+    username: CM_SCHEMA
+    password: CM_SCHEMA
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+  source:
+    indicatorFlag: 'true'
+    sendBatchSize: 1
+    queryMax: 100
+    triggerInterval: 1000
+    maxDbRetry: 3
+    retryInterval: 10
+    retryCount: 3
+    enableBufferedJpaBatch: 'true'
+    bufferWaitSeconds: 5
+    enableTrackingId: 'true'
+    enableDatabaseTimestamp: 'true'
+    enableConnectorTimestamp: 'true'
+    skipMismatchError: 'false'
+solace:
+  connector:
+    management:
+      session:
+        host: localsthost
+        msgVpn: msgvpn4
+        clientUsername: u4
+        clientPassword: u4pwd
+      leader-election:
+        mode: active_standby
+        fail-over:
+          max-attempts: 3
+          back-off-initial-interval: 1000
+          back-off-max-interval: 10000
+          back-off-multiplier: 2
+      queue: ""
+server:
+  port: 8092
