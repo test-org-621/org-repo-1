@@ -1,0 +1,153 @@
+server:
+  port: 8093
+spring:
+  application:
+    name: SINK_FIN_DEV_FE_FTP_TEST_V2
+  cloud:
+    stream:
+      bindings:
+        input-0:
+          destination: SOURCE_FIN_DEV_FE_NWFILE_TEST_V2_DATA
+          binder: solace
+        output-0:
+          destination: '${header(DEST_FILE_NAME)}'
+          binder: file-events
+file-events:
+  sink:
+    general:
+      miID: SINK_FIN_DEV_FE_FTP_TEST_V2
+      storeBackupStateRemotely: false
+      state_backup_path: /home/ubuntu/file-mesh/SINK_FIN_DEV_FE_FTP_TEST_V2/state_backup/backup.cfg
+    advanced:
+      maxEventsPerFile: 0
+      maxFileSize: 0
+      checkDynamicFileNameChangesEverytime: false
+      escapeCharsRegex: '[/]'
+      ignoreEmptyEvents: true
+      preventDuplicateEvents: true
+      preventDuplicateOnlyForRedeliveredEvents: false
+      uniqueEventIdentifyingHeader: '${header(DEST_FILE_NAME)}-${HEADER(EVENT_NO)}'
+      closeFileTriggerHeaderName: EVENT_TYPE
+      closeFileTriggerHeaderValue: FILE_COMPLETE
+      ignorePayloadOfCloseTriggerEvent: true
+      emptyEventsSubstitute: DUMMY_EVENT
+      escapeCharsReplacement: hh
+      ignoreWritingPayloadOfAllEvents: false
+    pre_process:
+      prependToFile: ""
+      prependToFirstEvent: ""
+      prependToEvents: ""
+    post_process:
+      appendToFile: 'This is file Close'
+      appendToEvents: ',END'
+    sftp_settings:
+      enabled: false
+      ip: 172.31.22.246
+      port: 22
+      user: sftpuser
+      password: Solace1024
+      strictHostKeyChecking: no
+    ftp_settings:
+      enabled: true
+      ip: ec2-44-223-70-11.compute-1.amazonaws.com
+      port: 21
+      user: ftpuser
+      password: Solace1024
+      secured: false
+    gcs:
+      enabled: false
+      projectId: sharp-sled-192215
+      credentialsFilePath: /home/centos/pubsubplus-connector-file-2.2.0/configs/gcs/sharp-sled-192215-741fc6564c5c.json
+      enableBulkComposeStrategy: true
+      retrySettings:
+        maxAttempts: 5
+        retryDelayMultiplier: 3
+        maxDurationMinutes: 2
+    file_mesh_manager:
+      enabled: true
+      useOutputDestinationSolaceCredentials: true
+      solace_base_publish_topic: FIN_DEV/SE/SINK/FTP
+      solace_messaging_mode: PERSISTENT
+      heartbeat_enabled: true
+      heartbeat_interval: 5
+      solace_base_publish_topic_heartbeat: FIN_DEV/SE/SINK/FTP
+      events:
+        fileStart: true
+        fileComplete: true
+  source:
+    general:
+      file_type: 4
+    file_mesh_manager:
+      useOutputDestinationSolaceCredentials: true
+solace:
+  connector:
+    error:
+      handle: stop_all
+    workflows:
+      '0':
+        enabled: true
+        acknowledgment:
+          publish-async: true
+    management:
+      leader-election:
+        mode: standalone
+        fail-over:
+          max-attempts: 3
+          back-off-initial-interval: 1000
+          back-off-max-interval: 10000
+          back-off-multiplier: 2
+      queue: SINK_FIN_DEV_FE_FTP_TEST_V2_MGT
+      session:
+        host: 'tcp://98.82.119.254:55555'
+        msg-vpn: default
+        client-username: test
+        client-password: test
+  java:
+    host: 'tcp://98.82.119.254:55555'
+    msg-vpn: default
+    client-username: test
+    client-password: test
+    connectRetries: -1
+    reconnectRetries: -1
+logging:
+  level:
+    root: INFO
+    com.solace.spring.cloud.stream.binder: INFO
+    com.solacecoe.spring.cloud.stream.binders.file-events: TRACE
+    com.solace.connector.core: INFO
+    com.solace.spring: INFO
+    com.solacecoe.spring.cloud.stream.binders.file: TRACE
+  file:
+    name: myapp.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: '${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz'
+      max-file-size: 100MB
+      max-history: 7
+      total-size-cap: 1GB
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: 'diskSpace,mappings'
+    jmx:
+      exposure:
+        exclude: '*'
+  endpoint:
+    logfile:
+      external-file: myapp.log
+    prometheus:
+      enabled: false
+    health:
+      show-details: ALWAYS
+      status:
+        order:
+          '0': DOWN
+          '1': OUT_OF_SERVICE
+          '2': RECONNECTING
+          '3': UP
+          '4': UNKNOWN
+      show-components: never
